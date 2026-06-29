@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Open Internet — Universal Acceptance for Everyone</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#00897B;--sky:#1E90FF;--gold:#E8A020;--lavender:#7B6FCC;
+  --coral:#E85D6A;--mint:#27AE87;--peach:#F4845F;
+  --dark:#1A2640;--panel:#FDFAF6;--ink:#1A2640;
+  --halftone: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+  --soft1:#EEF6F4;--soft2:#EEF0FB;--soft3:#FDF4EE;--soft4:#EEF8F2;
+}
+body{
+  background:var(--dark);
+  font-family:'Comic Neue',cursive;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  background-image: radial-gradient(ellipse at top, #1A3A5A, #1A2640);
+}
+
+/* HEADER */
+.hdr{
+  width:100%;padding:16px 20px;text-align:center;
+  background:var(--teal);
+  border-bottom:4px solid var(--ink);
+  position:relative;overflow:hidden;
+}
+.hdr::before{
+  content:'';position:absolute;inset:0;
+  background:var(--halftone);background-size:8px 8px;opacity:0.4;
+}
+.hdr h1{
+  font-family:'Bangers',cursive;font-size:2.2rem;
+  color:#fff;letter-spacing:3px;
+  text-shadow:3px 3px 0 var(--ink);position:relative;
+}
+.hdr p{font-size:0.82rem;color:#FFE082;margin-top:4px;font-weight:700;position:relative;}
+.level-badge{
+  display:inline-block;background:#FFE082;color:var(--ink);
+  font-family:'Bangers',cursive;font-size:1rem;letter-spacing:2px;
+  padding:3px 14px;border-radius:20px;border:2px solid var(--ink);
+  margin-top:6px;position:relative;
+}
+
+/* AUDIO BAR */
+.audio-bar{
+  width:100%;max-width:560px;
+  display:flex;align-items:center;gap:8px;
+  padding:8px 16px;
+  background:rgba(255,255,255,0.05);
+  border-bottom:2px solid rgba(255,255,255,0.08);
+}
+.audio-bar button{
+  background:var(--teal);border:2px solid var(--ink);border-radius:4px;
+  color:#fff;font-family:'Bangers',cursive;font-size:0.9rem;letter-spacing:1px;
+  padding:5px 12px;cursor:pointer;box-shadow:2px 2px 0 var(--ink);
+  transition:all 0.12s;
+}
+.audio-bar button:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink);}
+.audio-label{flex:1;font-size:0.72rem;color:rgba(255,255,255,0.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.audio-prog{width:80px;height:5px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden;}
+.audio-prog-fill{height:100%;background:var(--gold);border-radius:3px;width:0%;transition:width 0.15s;}
+.spd-btn{background:rgba(255,255,255,0.1)!important;border:1px solid rgba(255,255,255,0.2)!important;
+  font-size:0.72rem!important;padding:3px 8px!important;box-shadow:none!important;border-radius:10px!important;}
+
+/* PROGRESS */
+.prog-wrap{width:100%;max-width:560px;padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.prog-bar{flex:1;height:10px;background:#1A3050;border-radius:5px;border:2px solid rgba(255,255,255,0.2);overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:5px;transition:width 0.4s;}
+.prog-txt{font-family:'Bangers',cursive;font-size:1rem;color:#FFE082;white-space:nowrap;}
+
+/* BOOK */
+.comic-wrap{width:100%;max-width:560px;padding:12px 16px;flex:1;}
+.book{width:100%;perspective:1400px;}
+.page{display:none;width:100%;}
+.page.active{display:block;}
+.page-inner{
+  position:relative;width:100%;
+  transform-style:preserve-3d;
+  transition:transform 0.7s cubic-bezier(0.77,0,0.175,1);
+}
+.page-inner.flipped{transform:rotateY(-180deg);}
+.page-front,.page-back{
+  width:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:4px;border:4px solid var(--ink);
+  box-shadow:6px 6px 0 var(--ink);overflow:hidden;
+}
+.page-back{
+  position:absolute;top:0;left:0;
+  transform:rotateY(180deg);
+  background:linear-gradient(135deg,#1A2E45,#0D1E30);
+  display:flex;align-items:center;justify-content:center;min-height:380px;
+}
+
+/* COMIC PANEL DESIGN */
+.comic-page{
+  background:var(--panel);
+  background-image:var(--halftone);
+  background-size:6px 6px;
+  padding:0;
+}
+.panel-header{
+  background:var(--ink);color:#fff;
+  font-family:'Bangers',cursive;font-size:1.3rem;letter-spacing:2px;
+  padding:10px 16px;display:flex;align-items:center;gap:10px;
+}
+.panel-header .ch-icon{font-size:1.6rem;}
+.panels{display:flex;flex-direction:column;gap:0;}
+.panel{
+  border-bottom:3px solid var(--ink);
+  padding:14px 16px;position:relative;
+  background:var(--panel);
+  min-height:80px;display:flex;flex-direction:column;gap:8px;
+}
+.panel:last-child{border-bottom:none;}
+.panel-bg-soft1{background:var(--soft1);}
+.panel-bg-soft2{background:var(--soft2);}
+.panel-bg-soft3{background:var(--soft3);}
+.panel-bg-soft4{background:var(--soft4);}
+.panel-bg-teal{background:#E0F5F2;}
+.panel-bg-gold{background:#FDF5E4;}
+.panel-bg-coral{background:#FEF0F1;}
+.panel-bg-lav{background:#F0EEF9;}
+
+/* WIDE PANEL — full width accent */
+.panel-wide{
+  border-bottom:3px solid var(--ink);
+  padding:16px;background:linear-gradient(120deg,#E0F5F2,#EEF0FB);
+  min-height:100px;
+}
+/* TALL SIDE-BY-SIDE */
+.panel-row{display:flex;border-bottom:3px solid var(--ink);}
+.panel-col{flex:1;padding:12px;border-right:3px solid var(--ink);}
+.panel-col:last-child{border-right:none;}
+
+/* Speech bubbles */
+.bubble{
+  background:#fff;border:2.5px solid var(--ink);border-radius:18px;
+  padding:8px 14px;font-size:0.88rem;font-weight:700;
+  position:relative;display:inline-block;max-width:92%;line-height:1.4;
+}
+.bubble.ua{background:#E0F5F2;border-color:var(--teal);}
+.bubble.blocked{background:#FEF0F1;border-color:var(--coral);}
+.bubble.think{background:#F0EEF9;border-color:var(--lavender);}
+.bubble.info{background:#FDF5E4;border-color:var(--gold);}
+.bubble.good{background:#EEF8F2;border-color:var(--mint);}
+.bubble::after{
+  content:'';position:absolute;bottom:-12px;left:20px;
+  border:6px solid transparent;border-top-color:var(--ink);
+}
+.bubble.right::after{left:auto;right:20px;}
+.bubble.up::after{display:none;}
+.bubble.up::before{
+  content:'';position:absolute;top:-12px;left:20px;
+  border:6px solid transparent;border-bottom-color:var(--ink);
+}
+
+/* Characters */
+.char-row{display:flex;align-items:flex-end;gap:10px;}
+.char{font-size:2.8rem;line-height:1;}
+.char-sm{font-size:1.8rem;line-height:1;}
+.char-label{font-size:0.7rem;font-weight:700;color:var(--ink);text-align:center;margin-top:2px;}
+.narrator{
+  background:#FFE082;border:2.5px solid var(--ink);
+  border-radius:4px;padding:6px 12px;font-size:0.82rem;
+  font-weight:700;font-style:italic;text-align:center;
+  margin-top:4px;
+}
+.narrator.teal{background:#B2DFDB;}
+.narrator.lav{background:#D1CEF5;}
+.narrator.coral{background:#FECDCE;}
+
+/* Code / domain box */
+.domain-box{
+  border:2px solid var(--ink);border-radius:6px;
+  padding:8px 12px;font-size:0.82rem;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+  background:#fff;font-family:monospace;
+}
+.domain-box.ok{border-color:var(--teal);background:#E0F5F2;}
+.domain-box.bad{border-color:var(--coral);background:#FEF0F1;}
+
+/* BACK of page */
+.back-content{padding:28px 22px;text-align:center;width:100%;}
+.back-ch{font-family:'Bangers',cursive;font-size:1rem;color:#FFE082;letter-spacing:3px;margin-bottom:8px;}
+.back-title{font-family:'Bangers',cursive;font-size:1.8rem;color:#fff;margin-bottom:20px;letter-spacing:1px;line-height:1.2;}
+.back-points{display:flex;flex-direction:column;gap:10px;text-align:left;}
+.back-point{
+  background:rgba(255,255,255,0.06);border-left:4px solid #FFE082;
+  padding:10px 14px;border-radius:0 8px 8px 0;
+  font-size:0.88rem;color:#E2E8F0;line-height:1.5;
+}
+.back-point strong{color:#FFE082;}
+.back-point.teal{border-left-color:#4DB6AC;}
+.back-point.lav{border-left-color:#9FA8DA;}
+.back-point.coral{border-left-color:#EF9A9A;}
+.back-point.mint{border-left-color:#80CBC4;}
+
+/* CONTROLS */
+.controls{
+  display:flex;align-items:center;gap:8px;
+  width:100%;max-width:560px;padding:0 16px 16px;
+  flex-wrap:wrap;justify-content:center;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 18px;border:3px solid var(--ink);border-radius:4px;
+  font-family:'Bangers',cursive;font-size:1rem;letter-spacing:1px;
+  cursor:pointer;transition:all 0.15s;box-shadow:3px 3px 0 var(--ink);
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+.btn:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 var(--ink);}
+.btn-prev{background:var(--sky);color:#fff;flex:1;min-width:90px;justify-content:center;}
+.btn-next{background:var(--teal);color:#fff;flex:1;min-width:90px;justify-content:center;}
+.btn-flip{background:var(--lavender);color:#fff;flex:1;min-width:90px;justify-content:center;}
+.btn-toc{background:#FFE082;color:var(--ink);font-size:0.85rem;}
+.btn-audio{background:var(--coral);color:#fff;font-size:0.85rem;}
+
+/* TOC MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:#1A2640;border:4px solid #FFE082;border-radius:8px;
+  box-shadow:8px 8px 0 rgba(255,224,130,0.2);
+  padding:24px 20px;max-width:420px;width:100%;max-height:82vh;overflow-y:auto;
+}
+.modal h2{font-family:'Bangers',cursive;font-size:1.6rem;color:#FFE082;text-align:center;letter-spacing:2px;margin-bottom:16px;}
+.toc-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.06);}
+.toc-item:hover{background:rgba(255,224,130,0.1);}
+.toc-num{width:30px;height:30px;background:var(--teal);border:2px solid var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Bangers',cursive;font-size:1rem;color:#fff;flex-shrink:0;}
+.toc-ch{font-size:0.72rem;color:#FFE082;font-weight:700;letter-spacing:1px;}
+.toc-sub{font-size:0.9rem;color:#E2E8F0;font-weight:700;}
+.modal-close{width:100%;margin-top:14px;background:var(--teal);color:#fff;border:3px solid var(--ink);border-radius:4px;padding:10px;cursor:pointer;font-family:'Bangers',cursive;font-size:1.1rem;letter-spacing:1px;box-shadow:3px 3px 0 var(--ink);}
+.hint{font-size:0.72rem;color:rgba(255,255,255,0.3);text-align:center;padding:0 16px 12px;}
+.footer{width:100%;text-align:center;padding:12px;font-size:0.72rem;color:rgba(255,255,255,0.25);border-top:1px solid rgba(255,255,255,0.08);}
+
+/* COVER SPECIAL */
+.cover-art{
+  background:linear-gradient(160deg,#E0F5F2,#EEF0FB,#FDF5E4);
+  padding:24px 20px;text-align:center;
+}
+.cover-title{font-family:'Bangers',cursive;font-size:2.4rem;color:var(--ink);letter-spacing:3px;line-height:1.1;text-shadow:2px 2px 0 rgba(0,0,0,0.1);}
+.cover-sub{font-size:0.9rem;font-weight:700;color:var(--teal);margin-top:6px;}
+.cover-globe{font-size:5rem;margin:16px 0;}
+.cover-scripts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0;}
+.script-tag{
+  background:#fff;border:2px solid var(--ink);border-radius:20px;
+  padding:4px 10px;font-size:0.8rem;font-weight:700;color:var(--ink);
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>🌐 THE OPEN INTERNET</h1>
+  <p>A Comic About Universal Acceptance — Everyone Online, In Every Language</p>
+  <div class="level-badge">🌍 FOR EVERYONE</div>
+</div>
+
+<!-- Audio bar -->
+<div class="audio-bar" style="width:100%;max-width:560px;">
+  <button onclick="toggleAudio()" id="playBtn">▶ PLAY</button>
+  <div class="audio-label" id="audioLabel">Press PLAY to hear this page narrated</div>
+  <div class="audio-prog"><div class="audio-prog-fill" id="audioFill"></div></div>
+  <button class="spd-btn" onclick="cycleSpeed()" id="spdBtn">1×</button>
+  <button onclick="stopAudio()" style="background:rgba(255,255,255,0.1)!important;border:1px solid rgba(255,255,255,0.2)!important;box-shadow:none!important;font-size:0.8rem!important;padding:4px 8px!important;">⏹</button>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:10%"></div></div>
+  <div class="prog-txt" id="pTxt">1 / 10</div>
+</div>
+
+<div class="comic-wrap">
+<div class="book" id="book">
+
+<!-- PAGE 1: COVER -->
+<div class="page active" data-page="0">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">🌐</span>THE OPEN INTERNET — A STORY ABOUT UNIVERSAL ACCEPTANCE</div>
+  <div class="cover-art">
+    <div class="cover-globe">🌍</div>
+    <div class="cover-title">CAN THE WHOLE<br>WORLD GO ONLINE?</div>
+    <div class="cover-sub">Universal Acceptance · A Comic for Everyone</div>
+    <div class="cover-scripts">
+      <span class="script-tag">مرحبا.عالم</span>
+      <span class="script-tag">你好.世界</span>
+      <span class="script-tag">नमस्ते.भारत</span>
+      <span class="script-tag">привет.мир</span>
+      <span class="script-tag">안녕.한국</span>
+      <span class="script-tag">héllo.café</span>
+    </div>
+    <div class="narrator teal">These are ALL valid website addresses. But can YOUR app use them?</div>
+  </div>
+  <div class="panel panel-bg-soft1">
+    <div class="char-row">
+      <span class="char">👩🏽</span>
+      <div><div class="bubble ua">I tried to register a website in my language — Arabic — and the form just said "INVALID". Why?!</div></div>
+    </div>
+  </div>
+  <div class="panel panel-bg-soft2">
+    <div class="char-row">
+      <span class="char">👨🏿</span>
+      <div><div class="bubble think">I wanted to send an email using my native script. The system rejected it completely!</div></div>
+    </div>
+    <div class="narrator">This is a REAL problem affecting billions of people. It's called a Universal Acceptance failure.</div>
+  </div>
+  <div class="panel" style="background:var(--ink);color:#FFE082;text-align:center;padding:14px;">
+    <div style="font-family:'Bangers',cursive;font-size:1.1rem;letter-spacing:2px;">Turn the page — let's find out why this happens and how to fix it!</div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">INTRODUCTION</div>
+    <div class="back-title">What Is This Comic About?</div>
+    <div class="back-points">
+      <div class="back-point teal">🌐 <strong>Universal Acceptance (UA)</strong> means that ALL valid domain names and email addresses — in ANY language, script, or length — work equally well in every app, website, and system on the Internet.</div>
+      <div class="back-point">🗺️ Today, over <strong>1,200 domain extensions</strong> exist (like .عرب, .中国, .london, .engineering). Many apps still reject them — that's a UA failure.</div>
+      <div class="back-point lav">🌍 UA is the gateway to the <strong>next billion internet users</strong> who want to go online in their own language and script.</div>
+      <div class="back-point mint">✅ This comic — created using ICANN's Universal Acceptance course — will show you exactly what UA is, why it matters, and how to fix it.</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 2: What is UA? -->
+<div class="page" data-page="1">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">❓</span>CHAPTER 1: WHAT IS UNIVERSAL ACCEPTANCE?</div>
+  <div class="panel panel-bg-teal">
+    <div class="narrator teal">Meet Amina — she runs a small bakery in Morocco and wants to go online!</div>
+    <div class="char-row">
+      <span class="char">👩🏽‍🍳</span>
+      <div><div class="bubble ua">I want a website address in Arabic for my customers: <strong>مخبزتي.المغرب</strong></div></div>
+    </div>
+  </div>
+  <div class="panel panel-bg-soft2">
+    <div class="narrator">UA means her Arabic address must work EVERYWHERE — not just some places.</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+      <div class="domain-box ok">✅ <span>مخبزتي.المغرب</span><span style="font-size:0.72rem;color:var(--teal);margin-left:auto;">Valid! Should work everywhere.</span></div>
+      <div class="domain-box ok">✅ <span>amina-bakery.shop</span><span style="font-size:0.72rem;color:var(--teal);margin-left:auto;">Long new TLD. Also valid!</span></div>
+      <div class="domain-box ok">✅ <span>café.paris</span><span style="font-size:0.72rem;color:var(--teal);margin-left:auto;">Accent mark. Still valid!</span></div>
+    </div>
+  </div>
+  <div class="panel-row">
+    <div class="panel-col" style="background:var(--soft1);">
+      <div style="font-weight:700;font-size:0.8rem;color:var(--teal);margin-bottom:6px;">🌍 UA MEANS:</div>
+      <div style="font-size:0.78rem;display:flex;flex-direction:column;gap:5px;">
+        <span>✅ Any valid script</span>
+        <span>✅ Any valid length</span>
+        <span>✅ Any new extension</span>
+        <span>✅ Works in all apps</span>
+      </div>
+    </div>
+    <div class="panel-col" style="background:var(--soft3);">
+      <div style="font-weight:700;font-size:0.8rem;color:var(--coral);margin-bottom:6px;">❌ UA FAILURE:</div>
+      <div style="font-size:0.78rem;display:flex;flex-direction:column;gap:5px;">
+        <span>❌ "Invalid email!"</span>
+        <span>❌ Form won't accept</span>
+        <span>❌ Rejected by app</span>
+        <span>❌ User locked out</span>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-bg-gold">
+    <div class="char-row">
+      <span class="char">👩🏽‍🍳</span>
+      <div><div class="bubble info">So if my Arabic address works on Google but not on the payment site — that's a UA problem?</div></div>
+    </div>
+    <div class="narrator">Exactly! UA is only achieved when it works EVERYWHERE — not just some places.</div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">CHAPTER 1</div>
+    <div class="back-title">The Definition of UA</div>
+    <div class="back-points">
+      <div class="back-point teal">🌐 <strong>Universal Acceptance</strong> ensures all valid domain names and email addresses are treated equally by all internet-enabled apps, devices, and systems — regardless of script, language, or character length.</div>
+      <div class="back-point">📏 The old internet was built for short, Latin-script, 2–3 letter extensions like .com, .net, .org. But today there are <strong>1,200+ extensions</strong> and IDNs in Arabic, Chinese, Hindi, and more.</div>
+      <div class="back-point lav">🔤 <strong>Three pillars of UA:</strong> (1) Accept all valid domain names. (2) Accept all valid email addresses. (3) Process and display them correctly — in the right script!</div>
+      <div class="back-point mint">💡 <strong>Key insight:</strong> UA is a TECHNICAL problem — not a language or culture problem. The internet CAN handle these addresses. Apps just need to be updated to use them properly.</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 3: IDNs -->
+<div class="page" data-page="2">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">🔤</span>CHAPTER 2: INTERNATIONALIZED DOMAIN NAMES (IDNs)</div>
+  <div class="panel panel-bg-soft2">
+    <div class="narrator lav">Meet Lin — a developer in China trying to use an IDN for her company website.</div>
+    <div class="char-row">
+      <span class="char">👩🏻‍💻</span>
+      <div><div class="bubble think">I want to use <strong>公司.中国</strong> — that's "company dot China" in Mandarin. Is that a real domain?</div></div>
+    </div>
+    <div class="char-row" style="justify-content:flex-end;">
+      <div><div class="bubble ua right">Yes! It's called an Internationalized Domain Name — an IDN!</div></div>
+      <span class="char">🧑‍🏫</span>
+    </div>
+  </div>
+  <div class="panel panel-bg-teal">
+    <div style="font-weight:700;font-size:0.85rem;margin-bottom:8px;">🔍 HOW IDNs WORK UNDER THE HOOD:</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="background:#fff;border:2px solid var(--ink);border-radius:6px;padding:8px 10px;font-size:0.8rem;">
+        <strong>U-Label</strong> (what you see): <span style="font-size:1rem;"> 公司.中国</span>
+        <div style="font-size:0.72rem;color:#555;margin-top:3px;">The human-readable form in the user's script</div>
+      </div>
+      <div style="text-align:center;font-size:1.2rem;">⬇️ encoded as</div>
+      <div style="background:#fff;border:2px solid var(--ink);border-radius:6px;padding:8px 10px;font-size:0.8rem;font-family:monospace;">
+        <strong>A-Label</strong> (what DNS uses): xn--55qx5d.xn--fiqs8s
+        <div style="font-size:0.72rem;color:#555;margin-top:3px;">ASCII-compatible encoding — computers use this</div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-bg-lav">
+    <div class="char-row">
+      <span class="char">👩🏻‍💻</span>
+      <div><div class="bubble think">So the DNS converts it automatically? Then why do apps still reject it?</div></div>
+    </div>
+    <div class="char-row" style="justify-content:flex-end;">
+      <div><div class="bubble ua right">Because many apps still only expect the OLD format — just a-z letters, digits, hyphens. Their validation code rejects anything else!</div></div>
+      <span class="char">🧑‍🏫</span>
+    </div>
+  </div>
+  <div class="panel panel-bg-gold">
+    <div class="narrator">There are 60+ IDN country-code TLDs today — like .عرب (Arabic), .中国 (Chinese), .भारत (Hindi), .ไทย (Thai).</div>
+    <div class="char-row" style="margin-top:8px;">
+      <span class="char">👩🏻‍💻</span>
+      <div><div class="bubble info">That's hundreds of millions of people whose domain names apps can't handle! That must change.</div></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">CHAPTER 2</div>
+    <div class="back-title">Internationalized Domain Names</div>
+    <div class="back-points">
+      <div class="back-point teal">🔤 <strong>IDNs</strong> are domain names using characters from non-Latin scripts — Arabic, Chinese, Cyrillic, Devanagari, Thai, and more. They give users the ability to navigate the internet in their own language.</div>
+      <div class="back-point">🏷️ <strong>Two forms:</strong> The <strong>U-Label</strong> is what users type and see (e.g. 公司.中国). The <strong>A-Label</strong> is the ASCII version the DNS system actually uses (e.g. xn--55qx5d.xn--fiqs8s). Apps must handle both.</div>
+      <div class="back-point lav">📛 <strong>LDH-Label:</strong> A traditional domain using only Letters, Digits, and Hyphens (a-z, 0-9, -). Most old apps are only designed to accept LDH-labels — that's the root of many UA failures.</div>
+      <div class="back-point coral">⚠️ <strong>The problem:</strong> Over 60 IDN country-code TLDs exist (e.g. .السعودية, .ไทย, .中国). Apps that only validate for LDH will reject all of them, locking out entire communities.</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 4: EAI -->
+<div class="page" data-page="3">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">📧</span>CHAPTER 3: EMAIL ADDRESS INTERNATIONALIZATION (EAI)</div>
+  <div class="panel panel-bg-soft3">
+    <div class="narrator">Meet Raj — he wants to use an email address in Hindi!</div>
+    <div class="char-row">
+      <span class="char">👨🏽</span>
+      <div><div class="bubble ua">I want my email to be <strong>राज@भारत.भारत</strong> — my name and country, in Hindi. Is that possible?</div></div>
+    </div>
+    <div class="char-row" style="justify-content:flex-end;">
+      <div><div class="bubble good right">Absolutely! That's what EAI — Email Address Internationalization — makes possible!</div></div>
+      <span class="char">🧑‍🏫</span>
+    </div>
+  </div>
+  <div class="panel panel-bg-teal">
+    <div style="font-weight:700;font-size:0.85rem;margin-bottom:8px;">📧 EXAMPLES OF VALID EAI EMAIL ADDRESSES:</div>
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      <div class="domain-box ok"><span>राज@भारत.भारत</span><span style="font-size:0.7rem;color:#555;margin-left:auto;">Hindi — fully valid!</span></div>
+      <div class="domain-box ok"><span>用户@例子.广告</span><span style="font-size:0.7rem;color:#555;margin-left:auto;">Chinese — valid!</span></div>
+      <div class="domain-box ok"><span>Ñoño@español.org</span><span style="font-size:0.7rem;color:#555;margin-left:auto;">Spanish accents — valid!</span></div>
+      <div class="domain-box ok"><span>почта@тест.москва</span><span style="font-size:0.7rem;color:#555;margin-left:auto;">Russian — valid!</span></div>
+    </div>
+  </div>
+  <div class="panel panel-bg-coral">
+    <div class="narrator coral">But here's the problem Raj hits every time...</div>
+    <div class="char-row" style="margin-top:6px;">
+      <span class="char">😤</span>
+      <div><div class="bubble blocked">I try to sign up on a website and it says: "❌ Please enter a valid email address." But my address IS valid!</div></div>
+    </div>
+    <div style="background:#fff;border:2px solid var(--coral);border-radius:6px;padding:8px;margin-top:6px;font-size:0.78rem;">
+      <strong style="color:var(--coral);">WHY IT FAILS:</strong> The website uses old validation code that only allows ASCII characters (a-z, 0-9) — it was written before EAI existed and was never updated.
+    </div>
+  </div>
+  <div class="panel panel-bg-gold">
+    <div class="char-row">
+      <span class="char">👨🏽</span>
+      <div><div class="bubble info">So my identity is being erased by bad code? I have to use an English name I don't even go by?</div></div>
+    </div>
+    <div class="narrator">EAI gives everyone the right to a digital identity in their own language. UA makes sure systems respect it.</div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">CHAPTER 3</div>
+    <div class="back-title">Email in Your Own Language</div>
+    <div class="back-points">
+      <div class="back-point teal">📧 <strong>EAI — Email Address Internationalization</strong> — is the set of standards that allows email addresses to use non-ASCII characters in BOTH the local part (before @) and the domain part (after @).</div>
+      <div class="back-point">📬 An email address has two parts: <strong>local-part @ domain</strong>. EAI allows both to use any Unicode character — Arabic, Chinese, Hindi, accented Latin, and more.</div>
+      <div class="back-point coral">🔧 <strong>Why apps fail:</strong> Most validation code uses simple rules like "only a-z, 0-9, dots, hyphens." This was written for ASCII-only email. EAI requires updated validation using Unicode-aware standards (RFC 6530–6532).</div>
+      <div class="back-point mint">✅ <strong>UA-readiness includes EAI.</strong> A system is not UA-ready unless it correctly accepts, stores, processes, and displays internationalized email addresses.</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 5: The UA Problem in Detail -->
+<div class="page" data-page="4">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">🚧</span>CHAPTER 4: THE THREE UA FAILURES</div>
+  <div class="panel panel-bg-soft1">
+    <div class="narrator">A UA problem shows up in THREE main ways. Let's look at each one.</div>
+  </div>
+  <div class="panel panel-bg-coral">
+    <div style="font-weight:700;font-size:0.88rem;color:var(--coral);">❌ FAILURE 1: REJECTION</div>
+    <div class="char-row" style="margin-top:6px;">
+      <span class="char">😤</span>
+      <div><div class="bubble blocked">"Invalid email" — when my email address IS valid by international standards!</div></div>
+    </div>
+    <div style="font-size:0.78rem;color:#555;margin-top:6px;">App validation code uses regex patterns that only allow ASCII characters. Result: legitimate users locked out.</div>
+  </div>
+  <div class="panel panel-bg-lav">
+    <div style="font-weight:700;font-size:0.88rem;color:var(--lavender);">❌ FAILURE 2: WRONG DISPLAY</div>
+    <div class="char-row" style="margin-top:6px;">
+      <span class="char">😕</span>
+      <div><div class="bubble think">I typed <strong>公司.中国</strong> in my browser but it shows <strong>xn--55qx5d.xn--fiqs8s</strong>. What happened?!</div></div>
+    </div>
+    <div style="font-size:0.78rem;color:#555;margin-top:6px;">The app failed to convert A-label back to U-label for display. Users see confusing machine-readable codes.</div>
+  </div>
+  <div class="panel panel-bg-gold">
+    <div style="font-weight:700;font-size:0.88rem;color:var(--gold);">❌ FAILURE 3: LENGTH REJECTION</div>
+    <div class="char-row" style="margin-top:6px;">
+      <span class="char">🤦🏽</span>
+      <div><div class="bubble info">The app says my TLD ".engineering" is "too long to be real." But it IS real — it's a valid new gTLD!</div></div>
+    </div>
+    <div style="font-size:0.78rem;color:#555;margin-top:6px;">Old code assumed TLDs are max 4 characters (.com, .info). New gTLDs can be much longer — apps must update their length rules.</div>
+  </div>
+  <div class="panel panel-bg-soft4">
+    <div class="narrator">A 2017 UASG study found UA-readiness is a <strong>$9.8 billion opportunity</strong>. Every UA failure is lost business — and a lost user.</div>
+    <div class="char-row" style="margin-top:8px;">
+      <span class="char">👩🏽‍🍳</span><span class="char">👩🏻‍💻</span><span class="char">👨🏽</span>
+      <div><div class="bubble good">We all face these failures — but together, we can fix them!</div></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">CHAPTER 4</div>
+    <div class="back-title">Three Types of UA Failure</div>
+    <div class="back-points">
+      <div class="back-point coral">❌ <strong>Rejection:</strong> The app refuses to accept a valid IDN or EAI address. Usually caused by outdated validation logic (regex) that only allows ASCII characters (a-z, 0-9, hyphens, dots).</div>
+      <div class="back-point lav">❌ <strong>Wrong display:</strong> The app accepts the address internally but shows the A-label (punycode) instead of the U-label (readable script). This confuses users and erodes trust.</div>
+      <div class="back-point coral">❌ <strong>Length rejection:</strong> Old code assumes TLDs are 2–4 characters (.uk, .com, .info). New gTLDs like .engineering or .solutions are longer and get incorrectly rejected.</div>
+      <div class="back-point mint">💰 <strong>The cost of UA failures:</strong> UASG research identified UA-readiness as a $9.8+ billion opportunity. Every failure means lost customers, lost revenue, and users excluded from the digital economy.</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 6: Who Needs to Act? -->
+<div class="page" data-page="5">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">👥</span>CHAPTER 5: WHO NEEDS TO TAKE ACTION?</div>
+  <div class="panel panel-bg-soft1">
+    <div class="narrator">UA affects EVERYONE on the internet. But who is responsible for fixing it?</div>
+  </div>
+  <div class="panel-row">
+    <div class="panel-col" style="background:var(--soft2);">
+      <div style="font-size:1.5rem;text-align:center;">👩🏻‍💻</div>
+      <div style="font-weight:700;font-size:0.82rem;color:var(--lavender);text-align:center;margin-bottom:5px;">DEVELOPERS</div>
+      <div style="font-size:0.75rem;">Update validation code. Use Unicode-aware libraries. Test with IDN & EAI addresses.</div>
+    </div>
+    <div class="panel-col" style="background:var(--soft3);">
+      <div style="font-size:1.5rem;text-align:center;">🏢</div>
+      <div style="font-weight:700;font-size:0.82rem;color:var(--coral);text-align:center;margin-bottom:5px;">BUSINESSES</div>
+      <div style="font-size:0.75rem;">Audit your sign-up forms. Accept new TLDs. Support customers in their language.</div>
+    </div>
+  </div>
+  <div class="panel-row">
+    <div class="panel-col" style="background:var(--soft4);">
+      <div style="font-size:1.5rem;text-align:center;">🏛️</div>
+      <div style="font-weight:700;font-size:0.82rem;color:var(--teal);text-align:center;margin-bottom:5px;">GOVERNMENTS</div>
+      <div style="font-size:0.75rem;">Make e-government services UA-ready. Use IDN domains. Lead by example.</div>
+    </div>
+    <div class="panel-col" style="background:var(--soft1);">
+      <div style="font-size:1.5rem;text-align:center;">📚</div>
+      <div style="font-weight:700;font-size:0.82rem;color:var(--gold);text-align:center;margin-bottom:5px;">EDUCATORS</div>
+      <div style="font-size:0.75rem;">Teach UA in computing courses. ICANN's 12-module curriculum is free!</div>
+    </div>
+  </div>
+  <div class="panel panel-bg-teal">
+    <div class="char-row">
+      <span class="char">🧑‍🏫</span>
+      <div><div class="bubble ua">ICANN and the Universal Acceptance Steering Group (UASG) coordinate all these groups — and anyone can get involved!</div></div>
+    </div>
+  </div>
+  <div class="panel panel-bg-gold">
+    <div class="narrator">The UASG — founded in 2015 — includes Apple, Google, GoDaddy, Microsoft, Verisign, and hundreds more working together for UA.</div>
+    <div class="char-row" style="margin-top:6px;">
+      <span class="char">👩🏽‍🍳</span>
+      <div><div class="bubble info">So big tech companies AND small bakeries in Morocco both benefit from Universal Acceptance?</div></div>
+    </div>
+    <div class="char-row" style="justify-content:flex-end;">
+      <div><div class="bubble ua right">Exactly — UA is good for everyone! 🌍</div></div>
+      <span class="char">🧑‍🏫</span>
+    </div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">CHAPTER 5</div>
+    <div class="back-title">Everyone Has a Role</div>
+    <div class="back-points">
+      <div class="back-point lav">👩🏻‍💻 <strong>Developers:</strong> The biggest impact. Update input validation to use Unicode-aware libraries. Test every form field with IDN domains and EAI email addresses. Follow RFC 5321/5322 and RFC 6530–6532 for email.</div>
+      <div class="back-point coral">🏢 <strong>Businesses & registrars:</strong> Audit sign-up flows, email registration systems, login pages. Accept the full range of valid domain names. Offer customer support in local languages.</div>
+      <div class="back-point teal">🏛️ <strong>Governments:</strong> Adopt IDN-based domain names for public services. Make e-government platforms UA-ready. Engage with ICANN's Government Advisory Committee (GAC) working group on UA.</div>
+      <div class="back-point mint">📚 <strong>Academia:</strong> Integrate UA and IDN topics into computing and IT degrees. ICANN offers a free 12-module UA Curriculum for universities — already adopted by institutions in Bahrain and across Africa.</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 7: How to Fix It -->
+<div class="page" data-page="6">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">🔧</span>CHAPTER 6: HOW TO MAKE SYSTEMS UA-READY</div>
+  <div class="panel panel-bg-soft2">
+    <div class="narrator lav">Lin the developer is on a mission — make her company's app UA-ready!</div>
+    <div class="char-row">
+      <span class="char">👩🏻‍💻</span>
+      <div><div class="bubble think">Our sign-up form rejects half the world's internet users. Let's fix that — step by step.</div></div>
+    </div>
+  </div>
+  <div class="panel panel-bg-teal">
+    <div style="font-weight:700;font-size:0.85rem;margin-bottom:8px;">🔧 STEP 1: FIX DOMAIN NAME VALIDATION</div>
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:0.8rem;">
+      <div style="background:#fff;border:2px dashed var(--coral);border-radius:4px;padding:6px 8px;font-family:monospace;color:var(--coral);">❌ OLD: if(domain matches /^[a-zA-Z0-9.-]+$/)</div>
+      <div style="text-align:center;">⬇️ update to</div>
+      <div style="background:#fff;border:2px dashed var(--teal);border-radius:4px;padding:6px 8px;font-family:monospace;color:var(--teal);">✅ NEW: Use a Unicode-aware DNS validation library</div>
+    </div>
+    <div style="font-size:0.75rem;color:#555;margin-top:6px;">Allow A-labels (xn--...) and U-labels. Don't limit TLD length to 4 characters. Reject only truly invalid addresses.</div>
+  </div>
+  <div class="panel panel-bg-lav">
+    <div style="font-weight:700;font-size:0.85rem;margin-bottom:8px;">🔧 STEP 2: FIX EMAIL VALIDATION</div>
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:0.8rem;">
+      <div style="background:#fff;border:2px dashed var(--coral);border-radius:4px;padding:6px 8px;font-family:monospace;color:var(--coral);">❌ OLD: only accepts [a-z0-9._%+-]+@[a-z0-9.-]+</div>
+      <div style="text-align:center;">⬇️ update to</div>
+      <div style="background:#fff;border:2px dashed var(--lavender);border-radius:4px;padding:6px 8px;font-family:monospace;color:var(--lavender);">✅ NEW: Accept Unicode in local-part AND domain</div>
+    </div>
+    <div style="font-size:0.75rem;color:#555;margin-top:6px;">Follow RFC 6530–6532 standards. Use libraries like libeai or language-specific EAI validators.</div>
+  </div>
+  <div class="panel panel-bg-soft4">
+    <div style="font-weight:700;font-size:0.85rem;margin-bottom:8px;">🔧 STEP 3: TEST, STORE & DISPLAY CORRECTLY</div>
+    <div style="display:flex;flex-direction:column;gap:4px;font-size:0.78rem;">
+      <span>✅ Store addresses in Unicode (UTF-8) — not ASCII-encoded</span>
+      <span>✅ Display U-labels to users (readable script, not punycode)</span>
+      <span>✅ Test with real IDN and EAI addresses — use UASG test tools</span>
+      <span>✅ Check: <strong>uasg.tech/eai-check</strong> for your email server</span>
+    </div>
+  </div>
+  <div class="panel panel-bg-gold">
+    <div class="char-row">
+      <span class="char">👩🏻‍💻</span>
+      <div><div class="bubble good">After these fixes, our app accepted Amina's Arabic address, Raj's Hindi email, AND my Chinese domain!</div></div>
+    </div>
+    <div class="narrator">🎉 That's what being UA-ready looks like!</div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">CHAPTER 6</div>
+    <div class="back-title">The UA-Ready Checklist</div>
+    <div class="back-points">
+      <div class="back-point teal">✅ <strong>Domain validation:</strong> Accept all valid TLDs — including new gTLDs (any length) and IDN TLDs (non-ASCII). Use a standards-based library, not a hand-written regex with a hardcoded list of extensions.</div>
+      <div class="back-point lav">✅ <strong>Email validation:</strong> Follow RFC 6530–6532. Allow Unicode characters in both the local-part and domain. Store in UTF-8. Never downgrade to ASCII without user consent.</div>
+      <div class="back-point mint">✅ <strong>Display:</strong> Convert A-labels back to U-labels before showing users. A user who typed <span style="font-family:monospace">公司.中国</span> should see <span style="font-family:monospace">公司.中国</span> — not punycode gibberish.</div>
+      <div class="back-point coral">🛠️ <strong>Resources:</strong> UASG document hub (uasg.tech) · ICANN UA Readiness Framework · EAI check tool (uasg.tech/eai-check) · ICANN free training at learn.icann.org</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 8: Real World Impact -->
+<div class="page" data-page="7">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">🌟</span>CHAPTER 7: WHY UA MATTERS — REAL WORLD IMPACT</div>
+  <div class="panel panel-bg-teal">
+    <div class="narrator teal">UA isn't just a technical issue. It shapes who gets to fully participate in the digital world.</div>
+  </div>
+  <div class="panel panel-bg-soft3">
+    <div style="font-weight:700;font-size:0.88rem;color:var(--peach);">🌍 THE NEXT BILLION USERS</div>
+    <div style="font-size:0.8rem;margin-top:6px;display:flex;flex-direction:column;gap:4px;">
+      <span>📊 Over <strong>50% of the world</strong> is not yet online.</span>
+      <span>🗣️ Most of them speak languages written in non-Latin scripts.</span>
+      <span>💬 Arabic, Chinese, Hindi, Bengali, Urdu — over 3 billion speakers.</span>
+      <span>🚪 UA is the key to opening the digital door for them.</span>
+    </div>
+    <div class="char-row" style="margin-top:8px;">
+      <span class="char">👨🏿‍🌾</span>
+      <div><div class="bubble good">If I can register a domain in Amharic and use email in Amharic — then the internet is truly mine too.</div></div>
+    </div>
+  </div>
+  <div class="panel panel-bg-lav">
+    <div style="font-weight:700;font-size:0.88rem;color:var(--lavender);">💼 BUSINESS OPPORTUNITY</div>
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:0.8rem;margin-top:6px;">
+      <span>💰 UASG study: UA-readiness is a <strong>$9.8+ billion opportunity</strong></span>
+      <span>📈 UA-ready businesses reach customers in their preferred language</span>
+      <span>🏪 Small businesses get a domain name that their local customers recognise</span>
+      <span>🌐 New gTLDs like .shop, .app, .africa open new market identities</span>
+    </div>
+  </div>
+  <div class="panel panel-bg-soft4">
+    <div style="font-weight:700;font-size:0.88rem;color:var(--mint);">🏛️ DIGITAL INCLUSION & CULTURAL IDENTITY</div>
+    <div class="char-row" style="margin-top:8px;">
+      <span class="char">👩🏽‍🍳</span>
+      <div><div class="bubble ua">My bakery website in Arabic means my community — who reads Arabic — can find me easily. That's dignity.</div></div>
+    </div>
+    <div class="char-row" style="margin-top:6px;justify-content:flex-end;">
+      <div><div class="bubble think right">A domain in your own script isn't a luxury. It's a right. UA makes sure technology respects that.</div></div>
+      <span class="char">👨🏽</span>
+    </div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">CHAPTER 7</div>
+    <div class="back-title">A More Inclusive Internet</div>
+    <div class="back-points">
+      <div class="back-point teal">🌍 <strong>Digital inclusion:</strong> UA ensures that the internet works for people regardless of their language or script. This is fundamental to making the internet truly global — not just global for English speakers.</div>
+      <div class="back-point">📊 <strong>By the numbers:</strong> 1,200+ gTLDs including .دبي, .укр, .みんな · 60+ IDN ccTLDs · 3+ billion people speaking languages in non-Latin scripts · $9.8B business opportunity from UA-readiness.</div>
+      <div class="back-point lav">🎭 <strong>Cultural identity:</strong> Domain names and email addresses in local scripts allow individuals, businesses, and governments to express their cultural identity online. This is especially powerful for indigenous language communities.</div>
+      <div class="back-point mint">🚀 <strong>UA = growth:</strong> Every app that becomes UA-ready opens itself to a larger global market. Businesses that ignore UA are leaving billions of potential users — and customers — behind.</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 9: ICANN & UASG -->
+<div class="page" data-page="8">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">🏛️</span>CHAPTER 8: ICANN, UASG & THE UA MOVEMENT</div>
+  <div class="panel panel-bg-soft1">
+    <div class="char-row">
+      <span class="char">🧑‍🏫</span>
+      <div><div class="bubble ua">ICANN — the Internet Corporation for Assigned Names and Numbers — coordinates the global internet's naming system. UA is one of its top strategic priorities for 2026–2030.</div></div>
+    </div>
+  </div>
+  <div class="panel panel-bg-teal">
+    <div style="font-weight:700;font-size:0.85rem;margin-bottom:8px;">🤝 WHAT ICANN DOES FOR UA:</div>
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:0.8rem;">
+      <span>📚 Free online UA course at <strong>learn.icann.org</strong> — 12 modules with certificate</span>
+      <span>🌍 Regional UA training programs across Africa, APAC, Americas, Europe</span>
+      <span>🎓 UA Curriculum — free 12-module program for universities worldwide</span>
+      <span>📊 Annual UA Readiness Report — tracks global progress</span>
+      <span>🔬 Expert Working Group — developing UA adoption guidelines</span>
+    </div>
+  </div>
+  <div class="panel panel-bg-lav">
+    <div style="font-weight:700;font-size:0.85rem;margin-bottom:8px;">🌐 THE UASG — UNIVERSAL ACCEPTANCE STEERING GROUP:</div>
+    <div style="font-size:0.8rem;margin-bottom:8px;">Founded 2015 · Community-led · Supported by ICANN</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;">
+      <span style="background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:3px 8px;font-size:0.72rem;font-weight:700;">Apple</span>
+      <span style="background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:3px 8px;font-size:0.72rem;font-weight:700;">Google</span>
+      <span style="background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:3px 8px;font-size:0.72rem;font-weight:700;">Microsoft</span>
+      <span style="background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:3px 8px;font-size:0.72rem;font-weight:700;">GoDaddy</span>
+      <span style="background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:3px 8px;font-size:0.72rem;font-weight:700;">Verisign</span>
+      <span style="background:#fff;border:1.5px solid var(--ink);border-radius:12px;padding:3px 8px;font-size:0.72rem;font-weight:700;">+100s more</span>
+    </div>
+  </div>
+  <div class="panel panel-bg-gold">
+    <div style="font-weight:700;font-size:0.85rem;margin-bottom:6px;">📅 UA DAY — MARCH 28 EVERY YEAR:</div>
+    <div style="font-size:0.8rem;">Global events, hackathons, and training sessions to advance UA adoption. Over 50 events held worldwide in 2023!</div>
+    <div class="char-row" style="margin-top:8px;">
+      <span class="char">👩🏽‍🍳</span><span class="char">👩🏻‍💻</span><span class="char">👨🏽</span>
+      <div><div class="bubble good">We can ALL get certified! Free course at learn.icann.org 🎓</div></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">CHAPTER 8</div>
+    <div class="back-title">ICANN & the UA Community</div>
+    <div class="back-points">
+      <div class="back-point teal">🏛️ <strong>ICANN's role:</strong> Coordinator, educator, and catalyst for UA adoption. ICANN connects stakeholders facing UA obstacles with those who can solve them — and publishes results to share lessons learned globally.</div>
+      <div class="back-point lav">📋 <strong>The UA Curriculum:</strong> 12 free modules covering UA, IDNs, and EAI — available to universities worldwide. Currently integrated by the American University of Bahrain and universities across Africa in partnership with ICANN.</div>
+      <div class="back-point mint">📊 <strong>Progress tracker:</strong> ICANN's annual UA Readiness Report shows that EAI-ready email servers grew from ~20% to ~28% between 2022 and 2025. Progress is real — but there is more work to do.</div>
+      <div class="back-point coral">🎓 <strong>Get certified free:</strong> Take ICANN's UA online course at <strong>learn.icann.org</strong>. Complete all modules and receive a certificate. Developers, policymakers, students — all welcome!</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PAGE 10: Final -->
+<div class="page" data-page="9">
+<div class="page-inner">
+<div class="page-front">
+<div class="comic-page">
+  <div class="panel-header"><span class="ch-icon">🎓</span>FINAL CHAPTER: YOUR UA ACTION GUIDE</div>
+  <div class="panel panel-bg-soft4">
+    <div class="narrator">🏆 AMINA, LIN & RAJ'S 5 RULES FOR A TRULY OPEN INTERNET:</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+      <div style="display:flex;gap:8px;align-items:flex-start;"><span style="font-size:1.2rem;">1️⃣</span><span style="font-size:0.82rem;font-weight:700;">LEARN — Take the free UA course at learn.icann.org. Get certified!</span></div>
+      <div style="display:flex;gap:8px;align-items:flex-start;"><span style="font-size:1.2rem;">2️⃣</span><span style="font-size:0.82rem;font-weight:700;">TEST — Check your systems with real IDN domains and EAI email addresses. Use uasg.tech/eai-check</span></div>
+      <div style="display:flex;gap:8px;align-items:flex-start;"><span style="font-size:1.2rem;">3️⃣</span><span style="font-size:0.82rem;font-weight:700;">FIX — Update validation code, storage, and display logic to be Unicode-aware and standards-compliant.</span></div>
+      <div style="display:flex;gap:8px;align-items:flex-start;"><span style="font-size:1.2rem;">4️⃣</span><span style="font-size:0.82rem;font-weight:700;">ADVOCATE — Tell your colleagues, managers, and clients. Share why UA matters for inclusion and business.</span></div>
+      <div style="display:flex;gap:8px;align-items:flex-start;"><span style="font-size:1.2rem;">5️⃣</span><span style="font-size:0.82rem;font-weight:700;">CELEBRATE — Mark UA Day (28 March) and join the global community at universalacceptance.day</span></div>
+    </div>
+  </div>
+  <div class="panel panel-bg-teal">
+    <div class="char-row">
+      <span class="char">👩🏽‍🍳</span>
+      <div><div class="bubble ua">My bakery website now works in Arabic AND English — and customers across the region can find me!</div></div>
+    </div>
+    <div class="char-row" style="margin-top:6px;justify-content:flex-end;">
+      <div><div class="bubble think right">Our app now accepts Lin's Chinese domain, Raj's Hindi email, and Amina's Arabic address. UA-ready! 🎉</div></div>
+      <span class="char">👩🏻‍💻</span>
+    </div>
+  </div>
+  <div class="panel panel-bg-soft2">
+    <div class="narrator lav">🌍 UA ensures that every person — regardless of language, script, or location — can fully participate in the internet. That's the promise of Universal Acceptance.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;justify-content:center;">
+      <span style="background:#E0F5F2;border:2px solid var(--teal);border-radius:12px;padding:3px 10px;font-size:0.8rem;font-weight:700;">مرحبا.عالم ✅</span>
+      <span style="background:#EEF0FB;border:2px solid var(--lavender);border-radius:12px;padding:3px 10px;font-size:0.8rem;font-weight:700;">你好.世界 ✅</span>
+      <span style="background:#FDF5E4;border:2px solid var(--gold);border-radius:12px;padding:3px 10px;font-size:0.8rem;font-weight:700;">नमस्ते.भारत ✅</span>
+      <span style="background:#EEF8F2;border:2px solid var(--mint);border-radius:12px;padding:3px 10px;font-size:0.8rem;font-weight:700;">привет.мир ✅</span>
+    </div>
+  </div>
+  <div class="panel" style="background:var(--ink);color:#FFE082;text-align:center;padding:16px;">
+    <div style="font-family:'Bangers',cursive;font-size:1.3rem;letter-spacing:2px;">ONE INTERNET. EVERY LANGUAGE. FOR EVERYONE.</div>
+    <div style="font-size:0.8rem;color:#fff;margin-top:6px;">Based on ICANN Universal Acceptance Course · learn.icann.org</div>
+    <div style="font-size:0.8rem;color:#FFE082;margin-top:2px;">Written by Gbemisola Esho · 2026</div>
+  </div>
+</div>
+</div>
+<div class="page-back">
+  <div class="back-content">
+    <div class="back-ch">FINAL CHAPTER</div>
+    <div class="back-title">You Are Now UA-Aware!</div>
+    <div class="back-points">
+      <div class="back-point teal">🌐 <strong>Universal Acceptance</strong> ensures all valid domain names and email addresses — regardless of script, language, or length — work in every internet application, device, and system.</div>
+      <div class="back-point lav">🔤 <strong>IDNs and EAI</strong> allow people to register domain names and use email addresses in Arabic, Chinese, Hindi, Cyrillic, Thai, and hundreds of other scripts — but apps must be updated to support them.</div>
+      <div class="back-point mint">🔧 <strong>Fixing UA</strong> requires updating validation code, using Unicode-aware libraries, storing data in UTF-8, and displaying U-labels correctly. Resources and test tools are freely available at uasg.tech.</div>
+      <div class="back-point coral">🎓 <strong>Learn more &amp; get certified FREE:</strong> learn.icann.org · UA Day: universalacceptance.day · EAI test: uasg.tech/eai-check · Resources: uasg.tech/document-hub</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+</div><!-- /book -->
+</div><!-- /comic-wrap -->
+
+<div class="controls">
+  <button class="btn btn-prev" id="btnPrev" onclick="nav(-1)" disabled>◀ PREV</button>
+  <button class="btn btn-flip" onclick="flip()">🔄 FLIP</button>
+  <button class="btn btn-toc" onclick="openTOC()">📋</button>
+  <button class="btn btn-next" id="btnNext" onclick="nav(1)">NEXT ▶</button>
+</div>
+<p class="hint">Flip to see key lessons · Arrow keys or swipe to turn pages · Space to flip · Press PLAY for audio</p>
+
+<!-- TOC -->
+<div class="modal-overlay" id="tocModal" onclick="closeTOC(event)">
+  <div class="modal">
+    <h2>📋 CONTENTS</h2>
+    <div id="tocList"></div>
+    <button class="modal-close" onclick="closeTOC()">CLOSE</button>
+  </div>
+</div>
+
+<div class="footer">The Open Internet · Universal Acceptance · By Gbemisola Esho · 2026 · Based on ICANN UA Course</div>
+
+<script>
+const CH=[
+  {n:"Cover",t:"Can the Whole World Go Online?"},
+  {n:"Chapter 1",t:"What Is Universal Acceptance?"},
+  {n:"Chapter 2",t:"Internationalized Domain Names (IDNs)"},
+  {n:"Chapter 3",t:"Email Address Internationalization (EAI)"},
+  {n:"Chapter 4",t:"The Three UA Failures"},
+  {n:"Chapter 5",t:"Who Needs to Take Action?"},
+  {n:"Chapter 6",t:"How to Make Systems UA-Ready"},
+  {n:"Chapter 7",t:"Why UA Matters — Real World Impact"},
+  {n:"Chapter 8",t:"ICANN, UASG & the UA Movement"},
+  {n:"Final",t:"Your UA Action Guide"},
+];
+
+const NARRATIONS=[
+  "Welcome to The Open Internet — a comic about Universal Acceptance, based on ICANN's official UA course. Amina from Morocco wants an Arabic website. Raj from India wants a Hindi email. Lin from China wants a Chinese domain. They're all being rejected by apps that weren't built for the whole world. This comic explains why — and how to fix it.",
+  "Chapter one. What is Universal Acceptance? Universal Acceptance means that ALL valid domain names and email addresses — in any language, script, or length — work equally well in every app, system, and device on the internet. Amina's Arabic address, مخبزتي.المغرب, is completely valid. So is amina-bakery.shop and café.paris. A system is only UA-ready when it accepts ALL of them — not just some.",
+  "Chapter two. Internationalized Domain Names — IDNs. Lin wants to use 公司.中国 — company dot China in Mandarin. That's a real, valid domain name. Under the hood, the DNS converts it to a Punycode A-label for processing — xn--55qx5d.xn--fiqs8s. But many apps still only accept old-style ASCII domains with just letters, digits, and hyphens. Their validation code rejects IDNs entirely — locking out hundreds of millions of users.",
+  "Chapter three. Email Address Internationalization — EAI. Raj wants to use राज@भारत.भारत — his name and country in Hindi. That is a completely valid email address under international EAI standards. But when he signs up on websites, he gets: Invalid email. Why? Because the website's validation code was written before EAI existed and only allows ASCII characters — a through z, zero through nine. It was never updated. Raj's digital identity is being erased by old code.",
+  "Chapter four. The three types of UA failures. Failure one: Rejection — the app refuses a valid address. Failure two: Wrong display — the app accepts the address but shows confusing Punycode instead of the user's script. Failure three: Length rejection — old code assumes TLDs are maximum four characters. New extensions like dot engineering or dot solutions are longer and get incorrectly rejected. Every failure costs users — and businesses.",
+  "Chapter five. Who needs to take action? UA is everyone's responsibility. Developers must update their validation code and use Unicode-aware libraries. Businesses must audit their sign-up flows and accept new TLDs. Governments should lead by making e-government services UA-ready and using IDN domains. Educators should teach UA in computing courses — ICANN offers a free 12-module curriculum. The UASG, founded in 2015, coordinates all of this — and includes Apple, Google, Microsoft, GoDaddy, Verisign, and hundreds more.",
+  "Chapter six. How to make systems UA-ready. Step one: fix domain name validation. Replace old regex patterns that only allow ASCII with Unicode-aware validation libraries. Don't cap TLD length at four characters. Step two: fix email validation. Follow RFC 6530 through 6532. Allow Unicode in both the local part and domain of an email address. Step three: test, store, and display correctly. Store in UTF-8. Show users the readable U-label, not Punycode. Test with real IDN and EAI addresses using the free UASG test tools at uasg.tech.",
+  "Chapter seven. Why UA matters in the real world. Over fifty percent of the world is not yet online — and most of them speak languages in non-Latin scripts. Arabic, Chinese, Hindi, Bengali, Urdu — over three billion speakers. UA is the key to opening the digital door for the next billion internet users. A domain in your own script isn't a luxury. It's a right. And UA-readiness is a $9.8 billion business opportunity — as identified by a UASG study.",
+  "Chapter eight. ICANN, the UASG, and the UA movement. ICANN coordinates the internet's naming system and has made UA a top strategic priority for 2026 to 2030. ICANN offers a free UA online course at learn.icann.org — twelve modules with a certificate. The Universal Acceptance Steering Group, founded in 2015, runs regional training programs across Africa, Asia Pacific, the Americas, and Europe. UA Day is celebrated every March 28th. Over fifty events were held around the world in 2023.",
+  "Final chapter. Your UA action guide. One: Learn — take the free UA course at learn.icann.org and get certified. Two: Test — check your systems using real IDN domains and EAI email addresses at uasg.tech slash eai-check. Three: Fix — update your validation code, storage, and display logic to be Unicode-aware and standards-compliant. Four: Advocate — share why UA matters for digital inclusion and business growth. Five: Celebrate — mark UA Day on March 28th and join the global community. One internet. Every language. For everyone."
+];
+
+const SPEEDS=[1,1.25,1.5,2,0.75];
+let speedIdx=0, speaking=false, utter=null, progTimer=null, progStart=0, progEst=0;
+let cur=0; const tot=10;
+const allP=document.querySelectorAll('.page');
+
+function ui(){
+  allP.forEach((p,i)=>p.classList.toggle('active',i===cur));
+  document.getElementById('btnPrev').disabled=cur===0;
+  document.getElementById('btnNext').disabled=cur===tot-1;
+  document.getElementById('pFill').style.width=((cur+1)/tot*100)+'%';
+  document.getElementById('pTxt').textContent=(cur+1)+' / '+tot;
+  const inn=allP[cur].querySelector('.page-inner');
+  if(inn) inn.classList.remove('flipped');
+  document.getElementById('audioLabel').textContent='"'+CH[cur].t+'" — press PLAY to hear narration';
+  document.getElementById('audioFill').style.width='0%';
+}
+
+function nav(d){
+  const n=cur+d;
+  if(n>=0&&n<tot){
+    stopAudio();
+    cur=n;ui();
+  }
+}
+
+function flip(){
+  const inn=allP[cur].querySelector('.page-inner');
+  if(inn) inn.classList.toggle('flipped');
+}
+
+// ── Audio ──
+function toggleAudio(){
+  if(speaking){pauseAudio();return;}
+  playAudio();
+}
+
+function playAudio(){
+  stopAudio();
+  if(!window.speechSynthesis){
+    document.getElementById('audioLabel').textContent='Audio not supported in this browser.';
+    return;
+  }
+  utter=new SpeechSynthesisUtterance(NARRATIONS[cur]);
+  utter.rate=SPEEDS[speedIdx];
+  utter.pitch=1.05;
+  utter.lang='en-US';
+  const voices=speechSynthesis.getVoices();
+  const preferred=voices.find(v=>v.lang==='en-US'&&/female|samantha|zira|karen|moira/i.test(v.name))||voices.find(v=>v.lang==='en-US')||voices[0];
+  if(preferred) utter.voice=preferred;
+  utter.onstart=()=>{
+    speaking=true;
+    document.getElementById('playBtn').textContent='⏸ PAUSE';
+    const words=NARRATIONS[cur].split(' ').length;
+    progEst=(words/(SPEEDS[speedIdx]*2.6))*1000;
+    progStart=Date.now();
+    progTimer=setInterval(()=>{
+      const pct=Math.min(100,((Date.now()-progStart)/progEst)*100);
+      document.getElementById('audioFill').style.width=pct+'%';
+      if(pct>=100) clearInterval(progTimer);
+    },100);
+  };
+  utter.onend=utter.onerror=()=>{
+    speaking=false;
+    document.getElementById('playBtn').textContent='▶ PLAY';
+    document.getElementById('audioFill').style.width='100%';
+    clearInterval(progTimer);
+  };
+  utter.onpause=()=>{
+    speaking=false;
+    document.getElementById('playBtn').textContent='▶ PLAY';
+    clearInterval(progTimer);
+  };
+  speechSynthesis.speak(utter);
+}
+
+function pauseAudio(){
+  speechSynthesis.pause();
+  speaking=false;
+  document.getElementById('playBtn').textContent='▶ PLAY';
+  clearInterval(progTimer);
+}
+
+function stopAudio(){
+  speechSynthesis.cancel();
+  speaking=false;
+  document.getElementById('playBtn').textContent='▶ PLAY';
+  clearInterval(progTimer);
+  document.getElementById('audioFill').style.width='0%';
+}
+
+function cycleSpeed(){
+  speedIdx=(speedIdx+1)%SPEEDS.length;
+  document.getElementById('spdBtn').textContent=SPEEDS[speedIdx]+'×';
+  if(speaking) playAudio();
+}
+
+// ── TOC ──
+function openTOC(){
+  document.getElementById('tocList').innerHTML=CH.map((c,i)=>`
+    <div class="toc-item" onclick="goto(${i})">
+      <div class="toc-num">${i+1}</div>
+      <div><div class="toc-ch">${c.n}</div><div class="toc-sub">${c.t}</div></div>
+    </div>`).join('');
+  document.getElementById('tocModal').classList.add('open');
+}
+
+function closeTOC(e){
+  if(!e||e.target===document.getElementById('tocModal'))
+    document.getElementById('tocModal').classList.remove('open');
+}
+
+function goto(i){
+  stopAudio();cur=i;ui();
+  document.getElementById('tocModal').classList.remove('open');
+}
+
+// ── Swipe ──
+let sx=0;
+document.getElementById('book').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;});
+document.getElementById('book').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx;
+  if(Math.abs(dx)>50) nav(dx<0?1:-1);
+});
+
+// ── Keyboard ──
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight') nav(1);
+  if(e.key==='ArrowLeft') nav(-1);
+  if(e.key===' '){e.preventDefault();flip();}
+  if(e.key==='p'||e.key==='P') toggleAudio();
+});
+
+if(speechSynthesis.onvoiceschanged!==undefined)
+  speechSynthesis.onvoiceschanged=()=>{};
+
+ui();
+</script>
+</body>
+</html>
